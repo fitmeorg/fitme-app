@@ -1,8 +1,8 @@
 import React from "react";
-import { View } from "react-native";
+import Login from "./login";
 
 const App = () => {
-  return <View></View>;
+  return <Login />;
 };
 
 export default App;
