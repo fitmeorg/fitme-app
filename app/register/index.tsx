@@ -1,12 +1,14 @@
 import React from "react";
 import { View, TextInput, Pressable, Text } from "react-native";
-import { Link } from "expo-router";
+import { router } from "expo-router";
 import { styles } from "./style";
 import { stylePassword } from "./style";
-import { handleSubmit } from "@/components/fetch/post";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSession } from "@/hooks/context";
 
 const Register = () => {
+  const { signIn } = useSession();
+
   const [password, onChangePassword] = React.useState("");
   const [mail, onChangeMail] = React.useState("");
   const [name, onChangeName] = React.useState("");
@@ -71,21 +73,20 @@ const Register = () => {
         />
       </View>
 
-      <Link href="/home" asChild>
-        <Pressable
-          style={styles.button}
-          onPress={() =>
-            handleSubmit("auth/registe", {
-              mail,
-              username,
-              name,
-              phone,
-              password,
-            })
-          }>
-          <Text style={styles.buttonText}>Register</Text>
-        </Pressable>
-      </Link>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          signIn("http://localhost:3000/auth/register", {
+            name,
+            username,
+            mail,
+            password,
+            phone,
+          });
+          router.replace("/(home)");
+        }}>
+        <Text style={styles.buttonText}>Register</Text>
+      </Pressable>
     </View>
   );
 };
