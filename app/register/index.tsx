@@ -1,10 +1,10 @@
 import React from "react";
 import { View, TextInput, Pressable, Text } from "react-native";
 import { router } from "expo-router";
-import { styles } from "./style";
-import { stylePassword } from "./style";
+import { stylePassword, styles } from "./style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/context";
+import axios from "axios";
 
 const Register = () => {
   const { signIn } = useSession();
@@ -75,14 +75,19 @@ const Register = () => {
 
       <Pressable
         style={styles.button}
-        onPress={() => {
-          signIn("http://localhost:3000/auth/register", {
-            name,
-            username,
-            mail,
-            password,
-            phone,
+        onPress={async () => {
+          const response = await axios({
+            method: "post",
+            url: "http://localhost:3000/auth/register",
+            data: {
+              name,
+              username,
+              mail,
+              password,
+              phone,
+            },
           });
+          signIn(response);
           router.replace("/(home)");
         }}>
         <Text style={styles.buttonText}>Register</Text>

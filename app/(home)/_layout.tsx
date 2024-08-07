@@ -11,7 +11,7 @@ export default function AppLayout() {
   }
 
   if (!session) {
-    return <Redirect href="/" />;
+    return <Redirect href="/login" />;
   }
 
   return <Stack />;

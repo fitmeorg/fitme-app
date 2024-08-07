@@ -17,7 +17,7 @@ function useAsyncState<T>(
 }
 
 export async function setStorageItemAsync(key: string, value: string | null) {
-  if (Platform.OS === "web") {
+  if (Platform.OS === "web" && process.env.EXPO_PUBLIC_DEVELOPED === "web") {
     try {
       if (value === null) {
         localStorage.removeItem(key);

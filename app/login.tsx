@@ -5,6 +5,7 @@ import { styles } from "../constants/style";
 import { stylePassword } from "../constants/style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/context";
+import axios from "axios";
 
 const Login = () => {
   const { signIn } = useSession();
@@ -16,7 +17,6 @@ const Login = () => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>fitme</Text>
@@ -48,8 +48,14 @@ const Login = () => {
 
       <Pressable
         style={styles.button}
-        onPress={() => {
-          signIn("http://localhost:3000/auth/login", { mail, password });
+        onPress={async () => {
+          const response = await axios({
+            method: "post",
+            url: "http://localhost:3000/auth/login",
+            data: { mail, password },
+          });
+
+          signIn(response);
           router.replace("/(home)");
         }}>
         <Text style={styles.buttonText}>Login</Text>

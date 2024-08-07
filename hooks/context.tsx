@@ -1,14 +1,13 @@
 import React, {
-  useState,
   useContext,
   createContext,
   type PropsWithChildren,
 } from "react";
 import { useStorageState } from "./useStorageState";
-import axios from "axios";
+import { isExpired } from "react-jwt";
 
 const AuthContext = createContext<{
-  signIn: (url: string, data: any) => void;
+  signIn: (response: any) => void;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
@@ -29,35 +28,23 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: PropsWithChildren) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [[Loading, session], setSession] = useStorageState("session");
-
-  const signIn = async (url: string, data: any) => {
-    try {
-      setIsLoading(true);
-      const response = await axios({
-        method: "post",
-        url,
-        data,
-      });
-
-      setSession(response.data.access_token);
-    } catch (error) {
-      console.error("Error during sign-in:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const signOut = () => {
-    setSession(null);
-  };
+  const [[isLoading, session], setSession] = useStorageState("session");
 
   return (
     <AuthContext.Provider
       value={{
-        signIn,
-        signOut,
+        signIn: (response) => {
+          const token = isExpired(response.data.access_token);
+
+          if (!token) {
+            setSession(response.data.access_token);
+          } else {
+            setSession(null);
+          }
+        },
+        signOut: () => {
+          setSession(null);
+        },
         session,
         isLoading,
       }}>
