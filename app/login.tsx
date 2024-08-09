@@ -1,12 +1,15 @@
 import React from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
-import { Link } from "expo-router";
-import { styles } from "./style";
-import { stylePassword } from "./style";
-import { handleSubmit } from "@/components/fetch/post";
+import { router } from "expo-router";
+import { styles } from "../constants/style";
+import { stylePassword } from "../constants/style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSession } from "@/hooks/sessionContext";
+import axios from "axios";
 
 const Login = () => {
+  const { signIn } = useSession();
+
   const [password, onChangePassword] = React.useState("");
   const [mail, onChangeMail] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
@@ -14,7 +17,6 @@ const Login = () => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>fitme</Text>
@@ -44,17 +46,24 @@ const Login = () => {
         />
       </View>
 
-      <Link href={"/home"} asChild>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleSubmit("auth/login", { mail, password })}>
-          <Text style={styles.buttonText}>Login</Text>
-        </Pressable>
-      </Link>
+      <Pressable
+        style={styles.button}
+        onPress={async () => {
+          const response = await axios({
+            method: "post",
+            url: "http://localhost:3000/auth/login",
+            data: { mail, password },
+          });
 
-      <Link push href={"/register"}>
-        <Text>¿Has olvidado la contraseña?</Text>
-      </Link>
+          signIn(response);
+          router.replace("/(home)");
+        }}>
+        <Text style={styles.buttonText}>Login</Text>
+      </Pressable>
+
+      <Text onPress={() => router.push("/register")}>
+        ¿Has olvidado la contraseña?
+      </Text>
     </View>
   );
 };
