@@ -3,7 +3,7 @@ import { View, TextInput, Pressable, Text } from "react-native";
 import { router } from "expo-router";
 import { stylePassword, styles } from "./style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useSession } from "@/hooks/context";
+import { useSession } from "@/hooks/sessionContext";
 import axios from "axios";
 
 const Register = () => {

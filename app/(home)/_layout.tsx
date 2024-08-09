@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { Redirect, Stack } from "expo-router";
-import { useSession } from "@/hooks/context";
+import { useSession } from "@/hooks/sessionContext";
 
 export default function AppLayout() {
   const { session, isLoading } = useSession();

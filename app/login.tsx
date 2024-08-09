@@ -4,7 +4,7 @@ import { router } from "expo-router";
 import { styles } from "../constants/style";
 import { stylePassword } from "../constants/style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useSession } from "@/hooks/context";
+import { useSession } from "@/hooks/sessionContext";
 import axios from "axios";
 
 const Login = () => {

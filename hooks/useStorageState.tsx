@@ -17,22 +17,10 @@ function useAsyncState<T>(
 }
 
 export async function setStorageItemAsync(key: string, value: string | null) {
-  if (Platform.OS === "web" && process.env.EXPO_PUBLIC_DEVELOPED === "web") {
-    try {
-      if (value === null) {
-        localStorage.removeItem(key);
-      } else {
-        localStorage.setItem(key, value);
-      }
-    } catch (e) {
-      console.error("Local storage is unavailable:", e);
-    }
+  if (value == null) {
+    await SecureStore.deleteItemAsync(key);
   } else {
-    if (value == null) {
-      await SecureStore.deleteItemAsync(key);
-    } else {
-      await SecureStore.setItemAsync(key, value);
-    }
+    await SecureStore.setItemAsync(key, value);
   }
 }
 
@@ -40,19 +28,9 @@ export function useStorageState(key: string): UseStateHook<string> {
   const [state, setState] = useAsyncState<string>();
 
   React.useEffect(() => {
-    if (Platform.OS === "web") {
-      try {
-        if (typeof localStorage !== "undefined") {
-          setState(localStorage.getItem(key));
-        }
-      } catch (e) {
-        console.error("Local storage is unavailable:", e);
-      }
-    } else {
-      SecureStore.getItemAsync(key).then((value) => {
-        setState(value);
-      });
-    }
+    SecureStore.getItemAsync(key).then((value) => {
+      setState(value);
+    });
   }, [key]);
 
   const setValue = React.useCallback(

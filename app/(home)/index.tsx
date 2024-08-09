@@ -1,4 +1,4 @@
-import { useSession } from "@/hooks/context";
+import { useSession } from "@/hooks/sessionContext";
 import { router } from "expo-router";
 import React from "react";
 import { View, Text } from "react-native";
