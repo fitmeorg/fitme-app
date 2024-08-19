@@ -5,20 +5,20 @@ export default function Categories({ categories, filter }: any) {
   const [colors, setColors] = useState(categories.map(() => "black"));
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
-  const handlePress = (index: number, nameCategory: string) => {
+  const handlePress = (index: number, categoryId: string) => {
     const newColors = [...colors];
-    const isSelected = categoryFilter.includes(nameCategory);
+    const isSelected = categoryFilter.includes(categoryId);
 
     if (isSelected) {
       newColors[index] = "black";
       const newCategoryFilter = categoryFilter.filter(
-        (item) => item !== nameCategory
+        (item) => item !== categoryId
       );
       setCategoryFilter(newCategoryFilter);
       filter(newCategoryFilter);
     } else {
       newColors[index] = "blue";
-      const newCategoryFilter = [...categoryFilter, nameCategory];
+      const newCategoryFilter = [...categoryFilter, categoryId];
       setCategoryFilter(newCategoryFilter);
       filter(newCategoryFilter);
     }
@@ -32,7 +32,7 @@ export default function Categories({ categories, filter }: any) {
         <Pressable
           key={index}
           style={[styles.category, { backgroundColor: colors[index] }]}
-          onPress={() => handlePress(index, category.name)}>
+          onPress={() => handlePress(index, category._id)}>
           <Text style={styles.text}>{category.name}</Text>
         </Pressable>
       ))}
