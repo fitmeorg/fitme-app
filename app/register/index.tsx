@@ -78,7 +78,7 @@ const Register = () => {
         onPress={async () => {
           const response = await axios({
             method: "post",
-            url: "http://localhost:3000/auth/register",
+            url: `${process.env.EXPO_PUBLIC_URL}/register`,
             data: {
               name,
               username,

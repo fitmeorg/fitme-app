@@ -51,7 +51,7 @@ const Login = () => {
         onPress={async () => {
           const response = await axios({
             method: "post",
-            url: "http://localhost:3000/auth/login",
+            url: `${process.env.EXPO_PUBLIC_URL}/auth/login`,
             data: { mail, password },
           });
 
