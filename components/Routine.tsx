@@ -4,6 +4,7 @@ import axios from "axios";
 import { useSession } from "@/hooks/sessionContext";
 import { View, Text, Button, StyleSheet } from "react-native";
 import Categories from "./Categories";
+import { Link } from "expo-router";
 
 export default function Routine({ search, categoriesFilter }: any) {
   const session = useSession();
@@ -74,9 +75,15 @@ export default function Routine({ search, categoriesFilter }: any) {
       {data?.pages?.map((group: any) =>
         group.map((routines: any, index: number) => (
           <View key={index} style={styles.container}>
-            <Text key={routines._id} style={styles.title}>
+            <Link
+              key={routines._id}
+              style={styles.title}
+              href={{
+                pathname: "/(home)/routine/[id]",
+                params: { id: routines._id },
+              }}>
               {routines.name}
-            </Text>
+            </Link>
             <Categories categories={routines.categories} />
           </View>
         ))
