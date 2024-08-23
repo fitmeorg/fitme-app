@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const authStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
@@ -35,10 +35,8 @@ export const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-});
 
-export const stylePassword = StyleSheet.create({
-  container: {
+  passwordContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -49,7 +47,7 @@ export const stylePassword = StyleSheet.create({
     padding: 10,
     height: 40,
   },
-  input: {
+  passwordInput: {
     width: "100%",
   },
 });

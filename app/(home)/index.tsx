@@ -7,7 +7,7 @@ import { useSession } from "@/hooks/sessionContext";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import { authHeader } from "@/constants/authorization";
 const queryClient = new QueryClient();
 
 const Home = () => {
@@ -21,11 +21,7 @@ const Home = () => {
       try {
         const response = await axios.get(
           `${process.env.EXPO_PUBLIC_URL}/category/?limit=200&page=1`,
-          {
-            headers: {
-              Authorization: `Bearer ${session.session}`,
-            },
-          }
+          authHeader(session.session)
         );
         setCategories(response.data.data);
       } catch (error) {

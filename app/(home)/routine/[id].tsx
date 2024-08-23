@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import { useLocalSearchParams, Stack } from "expo-router";
 import axios from "axios";
 import { useSession } from "@/hooks/sessionContext";
 import Exercise from "@/components/Exercise";
+import { authHeader } from "@/constants/authorization";
+
+interface ImageData {
+  url: string;
+  width: string;
+  height: string;
+}
+
+interface ExerciseProps {
+  _id: string;
+  name: string;
+  images: ImageData[];
+  duration_minutes: number;
+}
 
 export default function Routine() {
   const { id } = useLocalSearchParams();
   const session = useSession();
-  const [exercises, setExercise] = useState([]);
+  const [exercises, setExercises] = useState<ExerciseProps[]>([]);
   const [nameRoutine, setNameRoutine] = useState("");
 
   useEffect(() => {
@@ -16,10 +30,10 @@ export default function Routine() {
       try {
         const response = await axios.get(
           `${process.env.EXPO_PUBLIC_URL}/routine/${id}`,
-          { headers: { Authorization: `Bearer ${session.session}` } }
+          authHeader(session.session)
         );
         setNameRoutine(response.data.name);
-        setExercise(response.data.exercises);
+        setExercises(response.data.exercises);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -28,32 +42,43 @@ export default function Routine() {
     fetchRoutine();
   }, [session, id]);
 
+  const renderExercise = ({ item }: { item: ExerciseProps }) => (
+    <Exercise
+      key={item._id}
+      name={item.name}
+      images={item.images}
+      duration_minutes={item.duration_minutes}
+    />
+  );
+
   return (
-    <ScrollView
+    <FlatList
+      data={exercises}
+      renderItem={renderExercise}
+      keyExtractor={(item) => item._id}
+      contentContainerStyle={styles.container}
+      ListHeaderComponent={
+        <Stack.Screen
+          options={{
+            title: `${nameRoutine}`,
+            headerStyle: {
+              backgroundColor: "#f4511e",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+      }
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.container}>
-      <Stack.Screen
-        options={{
-          title: `${nameRoutine}`,
-          headerStyle: {
-            backgroundColor: "#f4511e",
-          },
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
-        }}
-      />
-      {exercises.map((exercise: any) => (
-        <Exercise key={exercise._id} exercise={exercise} />
-      ))}
-    </ScrollView>
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
     justifyContent: "flex-start",
   },

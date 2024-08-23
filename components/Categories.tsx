@@ -1,41 +1,79 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, View, Pressable } from "react-native";
+import { Text, StyleSheet, View, Pressable, FlatList } from "react-native";
 
-export default function Categories({ categories, filter }: any) {
+interface Category {
+  _id: string;
+  name: string;
+}
+interface CategoriesProps {
+  categories: Category[];
+  filter: any;
+}
+
+export default function Categories({ categories, filter }: CategoriesProps) {
   const [colors, setColors] = useState(categories.map(() => "black"));
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
   const handlePress = (index: number, categoryId: string) => {
     const newColors = [...colors];
     const isSelected = categoryFilter.includes(categoryId);
+    let newCategoryFilter;
+
+    newColors[index] = "blue";
+    newCategoryFilter = [...categoryFilter, categoryId];
 
     if (isSelected) {
       newColors[index] = "black";
-      const newCategoryFilter = categoryFilter.filter(
-        (item) => item !== categoryId
-      );
-      setCategoryFilter(newCategoryFilter);
-      filter(newCategoryFilter);
-    } else {
-      newColors[index] = "blue";
-      const newCategoryFilter = [...categoryFilter, categoryId];
-      setCategoryFilter(newCategoryFilter);
-      filter(newCategoryFilter);
+      newCategoryFilter = categoryFilter.filter((item) => item !== categoryId);
     }
+
+    setCategoryFilter(newCategoryFilter);
+    filter(newCategoryFilter);
 
     setColors(newColors);
   };
 
+  const renderCategory = ({
+    item,
+    index,
+  }: {
+    item: Category;
+    index: number;
+  }) => {
+    if (filter === null) {
+      return (
+        <View
+          key={item._id}
+          style={[styles.category, { backgroundColor: colors[index] }]}>
+          <Text style={styles.text} selectable={false}>
+            {item.name}
+          </Text>
+        </View>
+      );
+    }
+    return (
+      <Pressable
+        key={item._id}
+        style={[styles.category, { backgroundColor: colors[index] }]}
+        onPress={() => {
+          handlePress(index, item._id);
+        }}>
+        <Text style={styles.text} selectable={false}>
+          {item.name}
+        </Text>
+      </Pressable>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      {categories.map((category: any, index: number) => (
-        <Pressable
-          key={index}
-          style={[styles.category, { backgroundColor: colors[index] }]}
-          onPress={() => handlePress(index, category._id)}>
-          <Text style={styles.text}>{category.name}</Text>
-        </Pressable>
-      ))}
+      <FlatList
+        data={categories}
+        renderItem={renderCategory}
+        keyExtractor={(category) => category._id}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
     </View>
   );
 }

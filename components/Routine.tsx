@@ -5,8 +5,14 @@ import { useSession } from "@/hooks/sessionContext";
 import { View, Text, Button, StyleSheet } from "react-native";
 import Categories from "./Categories";
 import { Link } from "expo-router";
+import { authHeader } from "@/constants/authorization";
 
-export default function Routine({ search, categoriesFilter }: any) {
+interface RoutineProps {
+  search: string;
+  categoriesFilter: string[];
+}
+
+export default function Routine({ search, categoriesFilter }: RoutineProps) {
   const session = useSession();
 
   const fetchRoutines = async ({ pageParam = 1 }) => {
@@ -19,9 +25,7 @@ export default function Routine({ search, categoriesFilter }: any) {
       : `${process.env.EXPO_PUBLIC_URL}/routine?limit=3&page=${pageParam}${categoryParams}`;
 
     try {
-      const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${session.session}` },
-      });
+      const response = await axios.get(url, authHeader(session.session));
       return response.data.data || response.data;
     } catch (error) {
       console.error("Error fetching routines:", error);
@@ -72,19 +76,20 @@ export default function Routine({ search, categoriesFilter }: any) {
 
   return (
     <View>
-      {data?.pages?.map((group: any) =>
+      {data.pages.map((group: any) =>
         group.map((routines: any, index: number) => (
           <View key={index} style={styles.container}>
             <Link
               key={routines._id}
               style={styles.title}
+              selectable={false}
               href={{
-                pathname: "/(home)/routine/[id]",
+                pathname: "/routine/[id]",
                 params: { id: routines._id },
               }}>
               {routines.name}
             </Link>
-            <Categories categories={routines.categories} />
+            <Categories categories={routines.categories} filter={null} />
           </View>
         ))
       )}

@@ -1,11 +1,10 @@
 import React from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
 import { router } from "expo-router";
-import { styles } from "../constants/style";
-import { stylePassword } from "../constants/style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/sessionContext";
 import axios from "axios";
+import { authStyles } from "@/constants/authStyles";
 
 const Login = () => {
   const { signIn } = useSession();
@@ -18,11 +17,11 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>fitme</Text>
+    <View style={authStyles.container}>
+      <Text style={authStyles.title}>fitme</Text>
 
       <TextInput
-        style={styles.input}
+        style={authStyles.input}
         onChangeText={onChangeMail}
         value={mail}
         placeholder="mail"
@@ -30,9 +29,9 @@ const Login = () => {
         inputMode="email"
       />
 
-      <View style={stylePassword.container}>
+      <View style={authStyles.passwordContainer}>
         <TextInput
-          style={stylePassword.input}
+          style={authStyles.passwordInput}
           onChangeText={onChangePassword}
           value={password}
           placeholder="password"
@@ -47,7 +46,7 @@ const Login = () => {
       </View>
 
       <Pressable
-        style={styles.button}
+        style={authStyles.button}
         onPress={async () => {
           const response = await axios({
             method: "post",
@@ -58,7 +57,7 @@ const Login = () => {
           signIn(response);
           router.replace("/(home)");
         }}>
-        <Text style={styles.buttonText}>Login</Text>
+        <Text style={authStyles.buttonText}>Login</Text>
       </Pressable>
 
       <Text onPress={() => router.push("/register")}>
