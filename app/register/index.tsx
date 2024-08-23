@@ -3,8 +3,8 @@ import { View, TextInput, Pressable, Text } from "react-native";
 import { router } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/sessionContext";
-import axios from "axios";
 import { authStyles } from "@/constants/authStyles";
+import createAxiosInstance from "@/constants/axiosConfig";
 
 const Register = () => {
   const { signIn } = useSession();
@@ -76,16 +76,13 @@ const Register = () => {
       <Pressable
         style={authStyles.button}
         onPress={async () => {
-          const response = await axios({
-            method: "post",
-            url: `${process.env.EXPO_PUBLIC_URL}/register`,
-            data: {
-              name,
-              username,
-              mail,
-              password,
-              phone,
-            },
+          const axiosInstance = createAxiosInstance();
+          const response = await axiosInstance.post("/auth/login", {
+            name,
+            username,
+            mail,
+            password,
+            phone,
           });
           signIn(response);
           router.replace("/(home)");

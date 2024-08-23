@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import SwitchComponent from "@/components/Search";
 import Categories from "@/components/Categories";
 import Routine from "@/components/Routine";
 import { useSession } from "@/hooks/sessionContext";
-import { useState, useEffect } from "react";
-import axios from "axios";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { authHeader } from "@/constants/authorization";
+import createAxiosInstance from "@/constants/axiosConfig";
+
 const queryClient = new QueryClient();
 
 const Home = () => {
@@ -19,10 +18,8 @@ const Home = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.EXPO_PUBLIC_URL}/category/?limit=200&page=1`,
-          authHeader(session.session)
-        );
+        const axiosInstance = createAxiosInstance(session.session);
+        const response = await axiosInstance.get("/category/?limit=200&page=1");
         setCategories(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);

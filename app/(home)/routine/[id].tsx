@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, FlatList } from "react-native";
 import { useLocalSearchParams, Stack } from "expo-router";
-import axios from "axios";
 import { useSession } from "@/hooks/sessionContext";
 import Exercise from "@/components/Exercise";
-import { authHeader } from "@/constants/authorization";
-
+import createAxiosInstance from "@/constants/axiosConfig";
 interface ImageData {
   url: string;
   width: string;
@@ -21,17 +19,15 @@ interface ExerciseProps {
 
 export default function Routine() {
   const { id } = useLocalSearchParams();
-  const session = useSession();
   const [exercises, setExercises] = useState<ExerciseProps[]>([]);
   const [nameRoutine, setNameRoutine] = useState("");
+  const session = useSession();
 
   useEffect(() => {
     const fetchRoutine = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.EXPO_PUBLIC_URL}/routine/${id}`,
-          authHeader(session.session)
-        );
+        const axiosInstance = createAxiosInstance(session.session);
+        const response = await axiosInstance.get(`/routine/${id}`);
         setNameRoutine(response.data.name);
         setExercises(response.data.exercises);
       } catch (error) {

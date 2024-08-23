@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useSession } from "@/hooks/sessionContext";
 import { View, Text, Button, StyleSheet } from "react-native";
 import Categories from "./Categories";
 import { Link } from "expo-router";
-import { authHeader } from "@/constants/authorization";
+import createAxiosInstance from "@/constants/axiosConfig";
 
 interface RoutineProps {
   search: string;
@@ -21,11 +20,12 @@ export default function Routine({ search, categoriesFilter }: RoutineProps) {
       .join("");
 
     const url = search
-      ? `${process.env.EXPO_PUBLIC_URL}/routine?name=${search}&limit=3&page=${pageParam}${categoryParams}`
-      : `${process.env.EXPO_PUBLIC_URL}/routine?limit=3&page=${pageParam}${categoryParams}`;
+      ? `/routine?name=${search}&limit=3&page=${pageParam}${categoryParams}`
+      : `/routine?limit=3&page=${pageParam}${categoryParams}`;
 
     try {
-      const response = await axios.get(url, authHeader(session.session));
+      const axiosInstance = createAxiosInstance(session.session);
+      const response = await axiosInstance.get(url);
       return response.data.data || response.data;
     } catch (error) {
       console.error("Error fetching routines:", error);

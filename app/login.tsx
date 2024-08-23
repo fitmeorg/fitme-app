@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/sessionContext";
 import axios from "axios";
 import { authStyles } from "@/constants/authStyles";
+import createAxiosInstance from "@/constants/axiosConfig";
 
 const Login = () => {
   const { signIn } = useSession();
@@ -48,10 +49,10 @@ const Login = () => {
       <Pressable
         style={authStyles.button}
         onPress={async () => {
-          const response = await axios({
-            method: "post",
-            url: `${process.env.EXPO_PUBLIC_URL}/auth/login`,
-            data: { mail, password },
+          const axiosInstance = createAxiosInstance();
+          const response = await axiosInstance.post("/auth/login", {
+            mail,
+            password,
           });
 
           signIn(response);
