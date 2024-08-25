@@ -14,12 +14,12 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
-  const { getAuth } = useAxios();
+  const { getWithAuth } = useAxios();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await getAuth(
+        const response = await getWithAuth(
           "/category/?limit=200&page=1",
           session.session
         );

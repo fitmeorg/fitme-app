@@ -7,10 +7,10 @@ import axios from "axios";
 
 const AxiosContext = createContext<{
   post: (url: string, data: any) => Promise<any>;
-  getAuth: (url: string, token: string | null | undefined) => Promise<any>;
+  getWithAuth: (url: string, token: string | null | undefined) => Promise<any>;
 }>({
   post: async () => null,
-  getAuth: async () => null,
+  getWithAuth: async () => null,
 });
 
 export function useAxios() {
@@ -34,7 +34,7 @@ export function AxiosProvider({ children }: PropsWithChildren) {
             throw error;
           }
         },
-        getAuth: async (url, token) => {
+        getWithAuth: async (url, token) => {
           try {
             return axios.get(`${process.env.EXPO_PUBLIC_URL}${url}`, {
               headers: { Authorization: `Bearer ${token}` },

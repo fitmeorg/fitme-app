@@ -13,7 +13,7 @@ interface RoutineProps {
 
 export default function Routine({ search, categoriesFilter }: RoutineProps) {
   const session = useSession();
-  const { getAuth } = useAxios();
+  const { getWithAuth } = useAxios();
 
   const fetchRoutines = async ({ pageParam = 1 }) => {
     const categoryParams = categoriesFilter
@@ -25,7 +25,7 @@ export default function Routine({ search, categoriesFilter }: RoutineProps) {
       : `/routine?limit=3&page=${pageParam}${categoryParams}`;
 
     try {
-      const response = await getAuth(url, session.session);
+      const response = await getWithAuth(url, session.session);
       return response.data.data || response.data;
     } catch (error) {
       console.error("Error fetching routines:", error);

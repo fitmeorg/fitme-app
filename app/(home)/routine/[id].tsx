@@ -22,12 +22,12 @@ export default function Routine() {
   const [exercises, setExercises] = useState<ExerciseProps[]>([]);
   const [nameRoutine, setNameRoutine] = useState("");
   const session = useSession();
-  const { getAuth } = useAxios();
+  const { getWithAuth } = useAxios();
 
   useEffect(() => {
     const fetchRoutine = async () => {
       try {
-        const response = await getAuth(`/routine/${id}`, session.session);
+        const response = await getWithAuth(`/routine/${id}`, session.session);
         setNameRoutine(response.data.name);
         setExercises(response.data.exercises);
       } catch (error) {
