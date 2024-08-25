@@ -36,7 +36,7 @@ export default function Routine() {
     };
 
     fetchRoutine();
-  }, [id]);
+  }, [session, id]);
 
   const renderExercise = ({ item }: { item: ExerciseProps }) => (
     <Exercise

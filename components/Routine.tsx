@@ -4,6 +4,7 @@ import { View, Text, Button, StyleSheet } from "react-native";
 import Categories from "./Categories";
 import { Link } from "expo-router";
 import { useAxios } from "@/hooks/axiosContext";
+import { useSession } from "@/hooks/sessionContext";
 
 interface RoutineProps {
   search: string;

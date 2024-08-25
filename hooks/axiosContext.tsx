@@ -4,7 +4,6 @@ import React, {
   type PropsWithChildren,
 } from "react";
 import axios from "axios";
-import { useSession } from "./sessionContext";
 
 const AxiosContext = createContext<{
   post: (url: string, data: any) => Promise<any>;
