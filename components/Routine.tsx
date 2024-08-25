@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useSession } from "@/hooks/sessionContext";
 import { View, Text, Button, StyleSheet } from "react-native";
 import Categories from "./Categories";
 import { Link } from "expo-router";

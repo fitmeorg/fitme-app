@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, FlatList } from "react-native";
 import { useLocalSearchParams, Stack } from "expo-router";
-import { useSession } from "@/hooks/sessionContext";
 import Exercise from "@/components/Exercise";
 import { useAxios } from "@/hooks/axiosContext";
+import { useSession } from "@/hooks/sessionContext";
 interface ImageData {
   url: string;
   width: string;
@@ -36,7 +36,7 @@ export default function Routine() {
     };
 
     fetchRoutine();
-  }, [session, id]);
+  }, [id]);
 
   const renderExercise = ({ item }: { item: ExerciseProps }) => (
     <Exercise
