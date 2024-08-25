@@ -4,10 +4,11 @@ import { router } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/sessionContext";
 import { authStyles } from "@/constants/authStyles";
-import createAxiosInstance from "@/constants/axiosConfig";
+import { useAxios } from "@/hooks/axiosContext";
 
 const Register = () => {
   const { signIn } = useSession();
+  const { post } = useAxios();
 
   const [password, onChangePassword] = React.useState("");
   const [mail, onChangeMail] = React.useState("");
@@ -76,8 +77,7 @@ const Register = () => {
       <Pressable
         style={authStyles.button}
         onPress={async () => {
-          const axiosInstance = createAxiosInstance();
-          const response = await axiosInstance.post("/auth/login", {
+          const response = await post("/auth/login", {
             name,
             username,
             mail,

@@ -3,12 +3,12 @@ import { View, Text, Pressable, TextInput } from "react-native";
 import { router } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/sessionContext";
-import axios from "axios";
 import { authStyles } from "@/constants/authStyles";
-import createAxiosInstance from "@/constants/axiosConfig";
+import { useAxios } from "@/hooks/axiosContext";
 
 const Login = () => {
   const { signIn } = useSession();
+  const { post } = useAxios();
 
   const [password, onChangePassword] = React.useState("");
   const [mail, onChangeMail] = React.useState("");
@@ -49,8 +49,7 @@ const Login = () => {
       <Pressable
         style={authStyles.button}
         onPress={async () => {
-          const axiosInstance = createAxiosInstance();
-          const response = await axiosInstance.post("/auth/login", {
+          const response = await post("/auth/login", {
             mail,
             password,
           });

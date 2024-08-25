@@ -1,11 +1,14 @@
 import React from "react";
 import { Slot } from "expo-router";
 import { SessionProvider } from "@/hooks/sessionContext";
+import { AxiosProvider } from "@/hooks/axiosContext";
 
 export default function Root() {
   return (
-    <SessionProvider>
-      <Slot />
-    </SessionProvider>
+    <AxiosProvider>
+      <SessionProvider>
+        <Slot />
+      </SessionProvider>
+    </AxiosProvider>
   );
 }
