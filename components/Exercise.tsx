@@ -1,21 +1,37 @@
 import React from "react";
 import { View, StyleSheet, Text, Image, Dimensions } from "react-native";
 
-export default function Exercise({ exercise }: any) {
-  const screenHeight = Dimensions.get("window").height;
+interface ImageData {
+  url: string;
+  width: string;
+  height: string;
+}
 
+interface ExerciseProps {
+  name: string;
+  images: ImageData[];
+  duration_minutes: number;
+}
+
+export default function Exercise({
+  name,
+  images,
+  duration_minutes,
+}: ExerciseProps) {
+  const screenHeight = Dimensions.get("window").height;
   const exerciseHeight = screenHeight / 8;
 
   const imageWidth =
-    (Number(exercise.images[0].width) * exerciseHeight) /
-    Number(exercise.images[0].height);
+    (Number(images[0].width) * exerciseHeight) / Number(images[0].height);
 
   return (
     <View style={[styles.container, { height: exerciseHeight }]}>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{exercise.name}</Text>
-        <Text style={styles.text}>
-          Duration: {exercise.duration_minutes} min
+        <Text style={styles.title} selectable={false}>
+          {name}
+        </Text>
+        <Text style={styles.text} selectable={false}>
+          Duration: {duration_minutes} min
         </Text>
       </View>
       <Image
@@ -24,7 +40,7 @@ export default function Exercise({ exercise }: any) {
           height: exerciseHeight,
           marginLeft: 5,
         }}
-        source={{ uri: exercise.images[0].url }}
+        source={{ uri: images[0].url }}
       />
     </View>
   );

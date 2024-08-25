@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import SwitchComponent from "@/components/Search";
 import Categories from "@/components/Categories";
 import Routine from "@/components/Routine";
-import { useSession } from "@/hooks/sessionContext";
-import { useState, useEffect } from "react";
-import axios from "axios";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useAxios } from "@/hooks/axiosContext";
+import { useSession } from "@/hooks/sessionContext";
 
 const queryClient = new QueryClient();
 
@@ -15,17 +14,14 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+  const { getWithAuth } = useAxios();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.EXPO_PUBLIC_URL}/category/?limit=200&page=1`,
-          {
-            headers: {
-              Authorization: `Bearer ${session.session}`,
-            },
-          }
+        const response = await getWithAuth(
+          "/category/?limit=200&page=1",
+          session.session
         );
         setCategories(response.data.data);
       } catch (error) {

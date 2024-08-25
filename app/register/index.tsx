@@ -1,13 +1,14 @@
 import React from "react";
 import { View, TextInput, Pressable, Text } from "react-native";
 import { router } from "expo-router";
-import { stylePassword, styles } from "./style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/sessionContext";
-import axios from "axios";
+import { authStyles } from "@/constants/authStyles";
+import { useAxios } from "@/hooks/axiosContext";
 
 const Register = () => {
   const { signIn } = useSession();
+  const { post } = useAxios();
 
   const [password, onChangePassword] = React.useState("");
   const [mail, onChangeMail] = React.useState("");
@@ -20,11 +21,11 @@ const Register = () => {
     setShowPassword(!showPassword);
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>fitme</Text>
+    <View style={authStyles.container}>
+      <Text style={authStyles.title}>fitme</Text>
 
       <TextInput
-        style={styles.input}
+        style={authStyles.input}
         onChangeText={onChangeName}
         value={name}
         placeholder="name"
@@ -32,7 +33,7 @@ const Register = () => {
       />
 
       <TextInput
-        style={styles.input}
+        style={authStyles.input}
         onChangeText={onChangeUsername}
         value={username}
         placeholder="username"
@@ -40,7 +41,7 @@ const Register = () => {
       />
 
       <TextInput
-        style={styles.input}
+        style={authStyles.input}
         onChangeText={onChangePhone}
         value={phone}
         placeholder="phone"
@@ -49,7 +50,7 @@ const Register = () => {
       />
 
       <TextInput
-        style={styles.input}
+        style={authStyles.input}
         onChangeText={onChangeMail}
         value={mail}
         placeholder="mail"
@@ -57,9 +58,9 @@ const Register = () => {
         inputMode="email"
       />
 
-      <View style={stylePassword.container}>
+      <View style={authStyles.passwordContainer}>
         <TextInput
-          style={stylePassword.input}
+          style={authStyles.passwordInput}
           onChangeText={onChangePassword}
           value={password}
           placeholder="password"
@@ -74,23 +75,19 @@ const Register = () => {
       </View>
 
       <Pressable
-        style={styles.button}
+        style={authStyles.button}
         onPress={async () => {
-          const response = await axios({
-            method: "post",
-            url: `${process.env.EXPO_PUBLIC_URL}/register`,
-            data: {
-              name,
-              username,
-              mail,
-              password,
-              phone,
-            },
+          const response = await post("/auth/login", {
+            name,
+            username,
+            mail,
+            password,
+            phone,
           });
           signIn(response);
           router.replace("/(home)");
         }}>
-        <Text style={styles.buttonText}>Register</Text>
+        <Text style={authStyles.buttonText}>Register</Text>
       </Pressable>
     </View>
   );
