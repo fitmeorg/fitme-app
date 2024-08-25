@@ -3,26 +3,21 @@ import { StyleSheet, ScrollView } from "react-native";
 import SwitchComponent from "@/components/Search";
 import Categories from "@/components/Categories";
 import Routine from "@/components/Routine";
-import { useSession } from "@/hooks/sessionContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAxios } from "@/hooks/axiosContext";
 
 const queryClient = new QueryClient();
 
 const Home = () => {
-  const session = useSession();
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
-  const { getAuth } = useAxios();
+  const { getWithAuth } = useAxios();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await getAuth(
-          "/category/?limit=200&page=1",
-          session.session
-        );
+        const response = await getWithAuth("/category/?limit=200&page=1");
         setCategories(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -30,7 +25,7 @@ const Home = () => {
     };
 
     fetchCategories();
-  }, [session]);
+  });
 
   return (
     <ScrollView

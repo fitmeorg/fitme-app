@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, FlatList } from "react-native";
 import { useLocalSearchParams, Stack } from "expo-router";
-import { useSession } from "@/hooks/sessionContext";
 import Exercise from "@/components/Exercise";
 import { useAxios } from "@/hooks/axiosContext";
 interface ImageData {
@@ -21,13 +20,12 @@ export default function Routine() {
   const { id } = useLocalSearchParams();
   const [exercises, setExercises] = useState<ExerciseProps[]>([]);
   const [nameRoutine, setNameRoutine] = useState("");
-  const session = useSession();
-  const { getAuth } = useAxios();
+  const { getWithAuth } = useAxios();
 
   useEffect(() => {
     const fetchRoutine = async () => {
       try {
-        const response = await getAuth(`/routine/${id}`, session.session);
+        const response = await getWithAuth(`/routine/${id}`);
         setNameRoutine(response.data.name);
         setExercises(response.data.exercises);
       } catch (error) {
@@ -36,7 +34,7 @@ export default function Routine() {
     };
 
     fetchRoutine();
-  }, [session, id]);
+  }, [id]);
 
   const renderExercise = ({ item }: { item: ExerciseProps }) => (
     <Exercise

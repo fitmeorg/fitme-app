@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useSession } from "@/hooks/sessionContext";
 import { View, Text, Button, StyleSheet } from "react-native";
 import Categories from "./Categories";
 import { Link } from "expo-router";
@@ -12,8 +11,7 @@ interface RoutineProps {
 }
 
 export default function Routine({ search, categoriesFilter }: RoutineProps) {
-  const session = useSession();
-  const { getAuth } = useAxios();
+  const { getWithAuth } = useAxios();
 
   const fetchRoutines = async ({ pageParam = 1 }) => {
     const categoryParams = categoriesFilter
@@ -25,7 +23,7 @@ export default function Routine({ search, categoriesFilter }: RoutineProps) {
       : `/routine?limit=3&page=${pageParam}${categoryParams}`;
 
     try {
-      const response = await getAuth(url, session.session);
+      const response = await getWithAuth(url);
       return response.data.data || response.data;
     } catch (error) {
       console.error("Error fetching routines:", error);
