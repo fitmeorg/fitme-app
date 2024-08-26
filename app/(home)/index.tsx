@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView } from "react-native";
 import SwitchComponent from "@/components/Search";
 import Categories from "@/components/Categories";
 import Routine from "@/components/Routine";
+import Exercise from "@/components/Exercise";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAxios } from "@/hooks/axiosContext";
 import { useSession } from "@/hooks/sessionContext";

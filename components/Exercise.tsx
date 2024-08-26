@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text, Image, Dimensions } from "react-native";
+import { Link } from "expo-router";
 
 interface ImageData {
   url: string;
@@ -8,12 +9,14 @@ interface ImageData {
 }
 
 interface ExerciseProps {
+  _id: string;
   name: string;
   images: ImageData[];
   duration_minutes: number;
 }
 
 export default function Exercise({
+  _id,
   name,
   images,
   duration_minutes,
@@ -27,9 +30,16 @@ export default function Exercise({
   return (
     <View style={[styles.container, { height: exerciseHeight }]}>
       <View style={styles.textContainer}>
-        <Text style={styles.title} selectable={false}>
+        <Link
+          key={_id}
+          style={styles.title}
+          selectable={false}
+          href={{
+            pathname: "/exercise/[id]",
+            params: { id: _id },
+          }}>
           {name}
-        </Text>
+        </Link>
         <Text style={styles.text} selectable={false}>
           Duration: {duration_minutes} min
         </Text>
