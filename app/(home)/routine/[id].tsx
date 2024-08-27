@@ -41,6 +41,7 @@ export default function Routine() {
   const renderExercise = ({ item }: { item: ExerciseProps }) => (
     <Exercise
       key={item._id}
+      _id={item._id}
       name={item.name}
       images={item.images}
       duration_minutes={item.duration_minutes}
@@ -54,18 +55,7 @@ export default function Routine() {
       keyExtractor={(item) => item._id}
       contentContainerStyle={styles.container}
       ListHeaderComponent={
-        <Stack.Screen
-          options={{
-            title: `${nameRoutine}`,
-            headerStyle: {
-              backgroundColor: "#f4511e",
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-              fontWeight: "bold",
-            },
-          }}
-        />
+        <Stack.Screen options={{ title: `${nameRoutine}` }} />
       }
       showsVerticalScrollIndicator={false}
     />
