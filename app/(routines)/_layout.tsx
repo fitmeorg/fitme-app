@@ -17,7 +17,7 @@ export default function AppLayout() {
   return (
     <Stack
       screenOptions={{
-        title: "fitme",
+        title: "rutinas",
         headerStyle: {
           backgroundColor: "#f4511e",
         },
