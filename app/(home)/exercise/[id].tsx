@@ -19,14 +19,14 @@ interface Exercise {
 
 export default function Exercise() {
   const { id } = useLocalSearchParams();
-  const session = useSession();
+  const {session} = useSession();
   const [exercise, setExercise] = useState<Exercise>();
   const { get } = useAxios();
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await get(`/exercise/${id}`, session.session);
+        const response = await get(`/exercise/${id}`, session);
         setExercise(response.data);
       } catch (error) {}
     };

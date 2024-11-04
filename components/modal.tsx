@@ -7,14 +7,14 @@ import { useSession } from "@/hooks/sessionContext";
 export default function ModalActivity() {
   const [modalVisible, setModalVisible] = useState(false);
   const { post } = useAxios();
-  const session = useSession();
+  const {session} = useSession();
 
   const activity = (type: string) => {
     return (
       <Text
         style={styles.modalText}
         onPress={async () => {
-          await post(`/streak/activity/${type}`, null, session.session);
+          await post(`/streak/activity/${type}`, null, session);
           setModalVisible(!modalVisible);
         }}>
         {type.toLowerCase()}
@@ -35,10 +35,10 @@ export default function ModalActivity() {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            {activity("LIBRE")}
-            {activity("DEPORTE")}
-            {activity("MY_RUTINA")}
-            {activity("DIETA")}
+            {activity("FREE")}
+            {activity("SPORT")}
+            {activity("MY_ROUTINE")}
+            {activity("DIET")}
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>

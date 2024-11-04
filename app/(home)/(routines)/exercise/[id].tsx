@@ -1,6 +1,6 @@
 import { useAxios } from "@/hooks/axiosContext";
 import { useSession } from "@/hooks/sessionContext";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 
@@ -19,14 +19,14 @@ interface Exercise {
 
 export default function Exercise() {
   const { id } = useLocalSearchParams();
-  const session = useSession();
+  const { session } = useSession();
   const [exercise, setExercise] = useState<Exercise>();
   const { get } = useAxios();
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await get(`/exercise/${id}`, session.session);
+        const response = await get(`/exercise/${id}`, session);
         setExercise(response.data);
       } catch (error) {}
     };
@@ -36,7 +36,6 @@ export default function Exercise() {
 
   return (
     <>
-      <Stack.Screen options={{ title: `${exercise?.name}` }} />
       <Image
         style={{
           width: "100%",

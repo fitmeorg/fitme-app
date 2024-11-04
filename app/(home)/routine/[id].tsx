@@ -21,13 +21,13 @@ export default function Routine() {
   const { id } = useLocalSearchParams();
   const [exercises, setExercises] = useState<ExerciseProps[]>([]);
   const [nameRoutine, setNameRoutine] = useState("");
-  const session = useSession();
+  const {session} = useSession();
   const { get } = useAxios();
 
   useEffect(() => {
     const fetchRoutine = async () => {
       try {
-        const response = await get(`/routine/${id}`, session.session);
+        const response = await get(`/routine/${id}`, session);
         setNameRoutine(response.data.name);
         setExercises(response.data.exercises);
       } catch (error) {

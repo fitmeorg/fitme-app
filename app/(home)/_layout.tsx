@@ -15,16 +15,8 @@ export default function AppLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        title: "fitme",
-        headerStyle: {
-          backgroundColor: "#f4511e",
-        },
-        headerTintColor: "#fff",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
-      }}></Stack>
+    <Stack>
+      <Stack.Screen name="group" options={{ headerShown: false }} />
+    </Stack>
   );
 }
