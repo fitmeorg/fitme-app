@@ -3,35 +3,25 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { useAxios } from "@/hooks/axiosContext";
 import { useSession } from "@/hooks/sessionContext";
-import Routine from "./Routine";
 
-interface RoutineProps {
+interface SearchProps {
   search: string;
-  categoriesFilter: string[];
 }
 
-export default function RoutineSearch({
-  search,
-  categoriesFilter,
-}: RoutineProps) {
+export default function UserSearch({ search }: SearchProps) {
+
   const {session} = useSession();
   const { get } = useAxios();
 
-  const fetchRoutines = async ({ pageParam = 1 }) => {
-    const categoryParams = categoriesFilter
-      .map((category: string) => `&categories=${category}`)
-      .join("");
-
-    const url = search
-      ? `/routine?name=${search}&limit=3&page=${pageParam}${categoryParams}`
-      : `/routine?limit=3&page=${pageParam}${categoryParams}`;
+  const fetchUser = async ({ pageParam = 1 }) => {
+    const url = `/auth/?page=${pageParam}&limit=3&username=${search}`;
 
     try {
       const response = await get(url, session);
       return response.data.data || response.data;
     } catch (error) {
-      console.error("Error fetching routines:", error);
-      throw new Error("Failed to fetch routines");
+      console.error("Error fetching user:", error);
+      throw new Error("Failed to fetch user");
     }
   };
 
@@ -45,8 +35,8 @@ export default function RoutineSearch({
     refetch,
     status,
   } = useInfiniteQuery({
-    queryKey: ["routines", search, categoriesFilter],
-    queryFn: fetchRoutines,
+    queryKey: ["user", search],
+    queryFn: fetchUser,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length === 0) {
@@ -58,7 +48,7 @@ export default function RoutineSearch({
 
   useEffect(() => {
     refetch();
-  }, [categoriesFilter]);
+  }, []);
 
   if (status === "pending") {
     return (
@@ -78,9 +68,9 @@ export default function RoutineSearch({
 
   return (
     <View>
-      {data.pages.map((routines: any) => (
-        <Routine routines={routines} />
-      ))}
+      {data.pages.map((users: any) =>
+        users.map((auth: any) => <Text key={auth._id}>{auth.username}</Text>)
+      )}
       <Button
         title={
           isFetchingNextPage

@@ -2,9 +2,9 @@ import { useAxios } from "@/hooks/axiosContext";
 import { useSession } from "@/hooks/sessionContext";
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, Button } from "react-native";
-import { Link } from "expo-router";
+import { Link, Stack } from "expo-router";
 import Routine from "@/components/Routine";
-import ModalActivity from "./modal";
+import ModalActivity from "@/components/modal";
 
 interface Streak {
   _id: string;
@@ -41,7 +41,7 @@ interface Routine {
 }
 
 export default function index() {
-  const session = useSession();
+  const { session } = useSession();
   const { get } = useAxios();
 
   const [streak, setStreak] = useState<Streak>();
@@ -52,14 +52,11 @@ export default function index() {
 
   const fetchGroups = async (pageNumber: number) => {
     try {
-      let response = await get(
-        `/group/?limit=3&page=${pageNumber}`,
-        session.session
-      );
+      let response = await get(`/group/?limit=3&page=${pageNumber}`, session);
 
       const newGroups = response.data.data;
 
-      response = await get("/routine?page=0&limit=1", session.session);
+      response = await get("/routine?page=0&limit=1", session);
       setRoutines(response.data.data);
 
       if (newGroups.length === 0) {
@@ -75,7 +72,7 @@ export default function index() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await get("/streak", session.session);
+        const response = await get("/streak", session);
         setStreak(response.data);
         fetchGroups(1);
       } catch (error) {
@@ -96,9 +93,9 @@ export default function index() {
     }
   };
 
-
   return (
     <>
+      <Stack.Screen options={{ title: "fitme" }} />
       <View style={style.streak}>
         <Text style={style.text}>Racha</Text>
         <Text>count {streak?.count}</Text>
@@ -111,7 +108,15 @@ export default function index() {
           style={{ maxHeight: 200 }}>
           {groups?.map((group: Group, index: number) => (
             <View key={index}>
-              <Text>{group.name}</Text>
+              <View>
+                <Link
+                  href={{
+                    pathname: "/group/[id]",
+                    params: { id: group._id },
+                  }}>
+                  {group.name}
+                </Link>
+              </View>
             </View>
           ))}
         </ScrollView>

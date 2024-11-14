@@ -10,7 +10,7 @@ import { useSession } from "@/hooks/sessionContext";
 const queryClient = new QueryClient();
 
 const Home = () => {
-  const session = useSession();
+  const { session } = useSession();
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
@@ -19,10 +19,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await get(
-          "/category/?limit=200&page=1",
-          session.session
-        );
+        const response = await get("/category/?limit=200&page=1", session);
         setCategories(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -38,9 +35,11 @@ const Home = () => {
       contentContainerStyle={styles.container}>
       <SwitchComponent onResults={setSearch} />
       <Categories categories={categories} filter={setCategoryFilter} />
-      <QueryClientProvider client={queryClient}>
-        <RoutineSearch search={search} categoriesFilter={categoryFilter} />
-      </QueryClientProvider>
+      {search !== "" && (
+        <QueryClientProvider client={queryClient}>
+          <RoutineSearch search={search} categoriesFilter={categoryFilter} />
+        </QueryClientProvider>
+      )}
     </ScrollView>
   );
 };
